@@ -30,7 +30,7 @@ if __name__ == '__main__':
     data_group = raw_data.groupby(col_id)
 
     for ft in id_list:
-        # print(ft, end='\t')
+        print(ft, end='\t')
         data = data_group.get_group(ft).reset_index()
         vol = data['vol_1d']
 
@@ -41,16 +41,22 @@ if __name__ == '__main__':
         test = vol[train_num:]
 
         res_lstm = tslstm(vol, train, test)
-        # res_arima = arima_fit(vol, train, test)
-        # res_xgboost = tsxgboost(vol, train, test)
-        # if res_arima[0] and res_arima[-1] > res_xgboost[-1]:
-        #     res_dict = dict(zip(col[1:3], res_arima))
-        #     res_dict[col[-1]] = 'arima'
-        # else:
-        #     res_dict = dict(zip(col[1:3], res_xgboost))
-        #     res_dict[col[-1]] = 'xgboost'
-        res_dict = dict(zip(col[1:3], res_lstm))
-        res_dict[col[-1]] = 'lstm'
+        res_arima = arima_fit(vol, train, test)
+        res_xgboost = tsxgboost(vol, train, test)
+        if not res_arima[0]:
+            res_arima
+        max_res = max(res_xgboost[-1], res_arima[-1], res_lstm[-1])
+        if res_arima[0] and res_arima[-1] >= max_res:
+            res_dict = dict(zip(col[1:3], res_arima))
+            res_dict[col[-1]] = 'arima'
+        elif res_xgboost[-1] >= max_res:
+            res_dict = dict(zip(col[1:3], res_xgboost))
+            res_dict[col[-1]] = 'xgboost'
+        else:
+            res_dict = dict(zip(col[1:3], res_lstm))
+            res_dict[col[-1]] = 'lstm'
+        # res_dict = dict(zip(col[1:3], res_lstm))
+        # res_dict[col[-1]] = 'lstm'
 
         res_dict[col[0]] = ft
         pprint(res_dict)

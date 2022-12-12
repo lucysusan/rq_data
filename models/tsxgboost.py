@@ -62,10 +62,10 @@ def tsxgboost(vol: pd.Series, train: pd.Series, test: pd.Series, test_display: b
 
     try:
         r2 = -1
-        in_num = 2
-        for input_num in range(2, 6):
-            in_num = input_num if param_determine(input_num, vol) > r2 else in_num
-
+        in_num = 22
+        # for input_num in range(5, 23):
+        #     in_num = input_num if param_determine(input_num, vol) > r2 else in_num
+        # print(f'input_num\t{in_num}')
         train = series_to_supervised(train.values, in_num)
         train_X, train_y = train[:, :-1], train[:, -1]
         train_fit = XGBRegressor(objective='reg:squarederror', n_estimators=1000).fit(train_X, train_y)
@@ -83,4 +83,4 @@ def tsxgboost(vol: pd.Series, train: pd.Series, test: pd.Series, test_display: b
             return test_pred
     except:
         print('Error\tError', end=None)
-        return None, None
+        return -100, -100

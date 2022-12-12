@@ -46,9 +46,10 @@ def tslstm(vol: pd.Series, train: pd.Series, test: pd.Series):
 
     try:
         r2 = -1
-        n_steps = 2
-        for input_num in range(2, 6):
-            n_steps = input_num if param_determine(input_num, vol) > r2 else n_steps
+        n_steps = 22
+        # for input_num in range(5, 23):
+        #     n_steps = input_num if param_determine(input_num, vol) > r2 else n_steps
+        # print(f'input_num\t{n_steps}')
 
         train_X, train_y = split_sequence(train.values, n_steps)
         n_features = 1
@@ -70,4 +71,4 @@ def tslstm(vol: pd.Series, train: pd.Series, test: pd.Series):
         return r2_train, r2_test
     except:
         print('Error\tError', end=None)
-        return None, None
+        return -100, -100

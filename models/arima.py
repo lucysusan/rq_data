@@ -66,4 +66,4 @@ def arima_fit(vol: pd.Series, train: pd.Series, test: pd.Series, out_folder: str
         return r2_train, r2_test
     except:
         print('Error\tError', end=None)
-        return None, None
+        return -100, -100
